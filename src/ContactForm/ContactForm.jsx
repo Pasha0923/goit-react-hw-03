@@ -7,6 +7,7 @@ const INITIAL_FORM_DATA = {
 const ContactForm = ({ onAddNewContacts }) => {
   const handleSubmit = (data, actions) => {
     onAddNewContacts(data);
+    console.log(data);
     actions.resetForm();
   };
   return (

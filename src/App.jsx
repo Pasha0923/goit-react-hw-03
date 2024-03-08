@@ -24,14 +24,20 @@ function App() {
     };
     setContacts((prevState) => [...prevState, finalData]); // ✅
   };
-
+  // Напишемо функцію яка описує видалення об'єктів () з існуючого масиву state
+  const handleDelete = (contactId) => {
+    setContacts((prevState) =>
+      prevState.filter((contact) => contact.id !== contactId)
+    );
+  };
   return (
     <div>
       <div>
         <h1>Phonebook</h1>
         <ContactForm onAddNewContacts={onAddNewContacts} />
         <SearchBox value={filter} onFilter={setFilter} />
-        <ContactList contacts={contacts} />
+        {/* // передамо стан contacts компоненті ContactList за допомогою пропса contacts */}
+        <ContactList contacts={contacts} onDelete={handleDelete} />
       </div>
     </div>
   );
