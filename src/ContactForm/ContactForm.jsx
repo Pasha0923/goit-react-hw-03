@@ -1,9 +1,21 @@
 import { Formik, ErrorMessage, Field, Form } from "formik";
 import css from "./ContactForm.module.css";
+import * as Yup from "yup";
 const INITIAL_FORM_DATA = {
   userName: "",
   number: "",
 };
+
+const contactFormSchema = Yup.object().shape({
+  userName: Yup.string()
+    .min(2, "User name must be at least 2 characters!")
+    .max(50, "User name must be less than 50 characters!")
+    .required("Required!"),
+  number: Yup.string()
+    .min(3, "Too short!")
+    .max(50, "Too long!")
+    .required("Required!"),
+});
 const ContactForm = ({ onAddNewContacts }) => {
   const handleSubmit = (data, actions) => {
     onAddNewContacts(data);
@@ -11,7 +23,11 @@ const ContactForm = ({ onAddNewContacts }) => {
     actions.resetForm();
   };
   return (
-    <Formik initialValues={INITIAL_FORM_DATA} onSubmit={handleSubmit}>
+    <Formik
+      initialValues={INITIAL_FORM_DATA}
+      onSubmit={handleSubmit}
+      validationSchema={contactFormSchema}
+    >
       <Form className={css.form}>
         <label className={css.label}>
           <span className={css.labelText}>Name: </span>
@@ -32,7 +48,7 @@ const ContactForm = ({ onAddNewContacts }) => {
           <Field
             className={css.formInput}
             placeholder="Please enter number"
-            type="tel"
+            type="number"
             name="number"
           />
           <ErrorMessage

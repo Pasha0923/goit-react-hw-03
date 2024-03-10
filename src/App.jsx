@@ -6,15 +6,19 @@ import "./App.css";
 import { nanoid } from "nanoid";
 
 const contactsData = [
-  { id: "id-1", name: "Rosie Simpson", number: "459-12-56" },
-  { id: "id-2", name: "Hermione Kline", number: "443-89-12" },
-  { id: "id-3", name: "Eden Clements", number: "645-17-79" },
-  { id: "id-4", name: "Annie Copeland", number: "227-91-26" },
+  { id: "id-1", userName: "Rosie Simpson", number: "459-12-56" },
+  { id: "id-2", userName: "Hermione Kline", number: "443-89-12" },
+  { id: "id-3", userName: "Eden Clements", number: "645-17-79" },
+  { id: "id-4", userName: "Annie Copeland", number: "227-91-26" },
 ];
 
 function App() {
   const [contacts, setContacts] = useState(contactsData);
   const [filter, setFilter] = useState("");
+  //Функція для фільтрації списку контактів за ім'ям
+  const searchContacts = contacts.filter((contact) =>
+    contact.userName.toLowerCase().includes(filter.toLowerCase())
+  );
 
   // Напишемо функцію яка описує додавання якихось нових об'єктів (поштової скриньки) до вже існуючого масиву в state
   const onAddNewContacts = (Data) => {
@@ -35,7 +39,7 @@ function App() {
       <div>
         <h1>Phonebook</h1>
         <ContactForm onAddNewContacts={onAddNewContacts} />
-        <SearchBox value={filter} onFilter={setFilter} />
+        <SearchBox value={searchContacts} onFilter={setFilter} />
         {/* // передамо стан contacts компоненті ContactList за допомогою пропса contacts */}
         <ContactList contacts={contacts} onDelete={handleDelete} />
       </div>

@@ -3,7 +3,7 @@ import { IoPerson } from "react-icons/io5";
 import { AiOutlineUserDelete } from "react-icons/ai";
 import css from "./Contact.module.css";
 
-const Contact = ({ id, name, number, onDelete }) => {
+const Contact = ({ id, userName, number, onDelete }) => {
   return (
     <div className={css.contactWrapper}>
       <div className={css.contactInfo}>
@@ -11,7 +11,7 @@ const Contact = ({ id, name, number, onDelete }) => {
           <span className={css.contactIcon}>
             <IoPerson />
           </span>
-          {name}
+          {userName}
         </p>
         <p className={css.contactText}>
           <span className={css.contactIcon}>

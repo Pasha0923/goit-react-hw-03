@@ -9,6 +9,7 @@ const SearchBox = ({ value, onFilter }) => {
         className={css.input}
         type="text"
         value={value}
+        // функція яка буде оновлювати state (інпут буде оновлюватися)
         onChange={(e) => onFilter(e.target.value)}
       />
       <span className={css.icon}>
