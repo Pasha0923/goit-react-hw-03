@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ContactForm from "./ContactForm/ContactForm";
 import SearchBox from "./SearchBox/SearchBox";
 import ContactList from "./ContactList/ContactList";
@@ -13,14 +13,29 @@ const contactsData = [
 ];
 
 function App() {
-  const [contacts, setContacts] = useState(contactsData);
+  // const [contacts, setContacts] = useState(contactsData);
+  const [contacts, setContacts] = useState(() => {
+    // Зчитуємо дані с локального сховища
+    const stringifiedContacts = localStorage.getItem("contacts");
+    if (!stringifiedContacts) return contactsData;
+    const parsedContacts = JSON.parse(stringifiedContacts);
+    return parsedContacts;
+  });
+  useEffect(() => {
+    localStorage.setItem("contacts", JSON.stringify(contacts));
+  }, [contacts]);
+  //  початкове значення стану фільтру пустий рядок
   const [filter, setFilter] = useState("");
+  // функція яка буде оновлювати state під час кожної події onChange (інпут буде оновлюватися)
+  const onFilter = (e) => {
+    if (e.target.name === "searchName") setFilter(e.target.value);
+  };
   //Функція для фільтрації списку контактів за ім'ям
   const searchContacts = contacts.filter((contact) =>
     contact.userName.toLowerCase().includes(filter.toLowerCase())
   );
 
-  // Напишемо функцію яка описує додавання якихось нових об'єктів (поштової скриньки) до вже існуючого масиву в state
+  //  функція яка описує додавання якихось нових об'єктів (поштової скриньки) до вже існуючого масиву в state
   const onAddNewContacts = (Data) => {
     const finalData = {
       ...Data,
@@ -28,7 +43,7 @@ function App() {
     };
     setContacts((prevState) => [...prevState, finalData]); // ✅
   };
-  // Напишемо функцію яка описує видалення об'єктів () з існуючого масиву state
+  // функція яка описує видалення об'єктів () з існуючого масиву state
   const handleDelete = (contactId) => {
     setContacts((prevState) =>
       prevState.filter((contact) => contact.id !== contactId)
@@ -39,9 +54,9 @@ function App() {
       <div>
         <h1>Phonebook</h1>
         <ContactForm onAddNewContacts={onAddNewContacts} />
-        <SearchBox value={searchContacts} onFilter={setFilter} />
-        {/* // передамо стан contacts компоненті ContactList за допомогою пропса contacts */}
-        <ContactList contacts={contacts} onDelete={handleDelete} />
+        <SearchBox searchName={filter} onFilter={onFilter} />
+        {/* передамо кастомну колбек функцію searchContacts через пропс contacts */}
+        <ContactList contacts={searchContacts} onDelete={handleDelete} />
       </div>
     </div>
   );
